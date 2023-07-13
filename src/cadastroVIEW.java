@@ -164,8 +164,15 @@ public class CadastroVIEW extends javax.swing.JFrame {
                 System.out.println("Erro ao conectar com o banco de dados!");
             } else {
                 ProdutosDAO produtoDao = new ProdutosDAO();
-                produtoDao.cadastrarProduto(produto);
+                int resposta = produtoDao.cadastrarProduto(produto);
 
+                if (resposta == 1) {
+                    JOptionPane.showMessageDialog(null, "Produtos cadastrado com sucesso!");
+                    limparCampos();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível cadastrar o produto!");
+                }
+                
                 conectDao.desconectar();
             }
         }
