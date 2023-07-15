@@ -54,8 +54,9 @@ public class ProdutosDAO {
         conn.connectDB();
         
         try {
-            prep = conn.getConn().prepareStatement("UPDATE produtos SET status = 'Vendido' WHERE id = ?");
-            prep.setInt(1, produto.getId());
+            prep = conn.getConn().prepareStatement("UPDATE produtos SET status = ? WHERE id = ?");
+            prep.setString(1, produto.getStatus());
+            prep.setInt(2, produto.getId());
             int status = prep.executeUpdate();
             return status;
         } catch (SQLException e) {
