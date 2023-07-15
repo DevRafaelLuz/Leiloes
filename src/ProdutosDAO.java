@@ -64,24 +64,26 @@ public class ProdutosDAO {
         }
     }
     
-    public ProdutosDTO listarProdutosVendidos(String status) {
+    public ArrayList<ProdutosDTO> listarProdutosVendidos() {
+        String sql = "SELECT * FROM produtos WHERE status = 'Vendido'";
         conn.connectDB();
         
         try {
-            ProdutosDTO produto = new ProdutosDTO();
-            prep = conn.getConn().prepareStatement("SELECT * FROM produtos WHERE status = 'Vendido'");
+            prep = conn.getConn().prepareStatement(sql);
             resultset = prep.executeQuery();
             
-            if (resultset.next()) {
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultset.getInt("id"));
                 produto.setNome(resultset.getString("nome"));
                 produto.setValor(resultset.getInt("valor"));
                 produto.setStatus(resultset.getString("status"));
-                return produto;
-            } else {
-                return null;
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao fazer a consulta: " + e.getMessage());
+                listagem.add(produto);
+            }            
+            
+            return listagem;
+        } catch (SQLException ex) {
+            System.out.println("Erro ao conectar: " + ex.getMessage());
             return null;
         }
     }
