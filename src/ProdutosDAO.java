@@ -41,13 +41,26 @@ public class ProdutosDAO {
                 produto.setValor(resultset.getInt("valor"));
                 produto.setStatus(resultset.getString("status"));
                 listagem.add(produto);
-            }
-            
+            }            
             
             return listagem;
         } catch (SQLException ex) {
             System.out.println("Erro ao conectar: " + ex.getMessage());
             return null;
+        }
+    }
+    
+    public int atualizar(ProdutosDTO produto) {
+        conn.connectDB();
+        
+        try {
+            prep = conn.getConn().prepareStatement("UPDATE produtos SET status = 'Vendido' WHERE id = ?");
+            prep.setInt(1, produto.getId());
+            int status = prep.executeUpdate();
+            return status;
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar: " + e.getMessage());
+            return e.getErrorCode();
         }
     }
 
