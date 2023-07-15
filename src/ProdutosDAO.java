@@ -50,7 +50,7 @@ public class ProdutosDAO {
         }
     }
     
-    public int atualizar(ProdutosDTO produto) {
+    public int venderProduto(ProdutosDTO produto) {
         conn.connectDB();
         
         try {
@@ -61,6 +61,28 @@ public class ProdutosDAO {
         } catch (SQLException e) {
             System.out.println("Erro ao atualizar: " + e.getMessage());
             return e.getErrorCode();
+        }
+    }
+    
+    public ProdutosDTO listarProdutosVendidos(String status) {
+        conn.connectDB();
+        
+        try {
+            ProdutosDTO produto = new ProdutosDTO();
+            prep = conn.getConn().prepareStatement("SELECT * FROM produtos WHERE status = 'Vendido'");
+            resultset = prep.executeQuery();
+            
+            if (resultset.next()) {
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+                return produto;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao fazer a consulta: " + e.getMessage());
+            return null;
         }
     }
 
